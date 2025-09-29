@@ -1,0 +1,26 @@
+name: Epochalypse
+
+on:
+  schedule:
+    - cron: "14 3 * * *"
+  workflow_dispatch:
+
+jobs:
+  send-message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: bun ci
+
+      - name: Send message
+        run: bun run src/index.ts
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
